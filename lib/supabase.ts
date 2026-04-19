@@ -1,6 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import * as SecureStore from 'expo-secure-store';
 import 'react-native-url-polyfill/auto';
 
 // Get these from https://app.supabase.com/project/_/settings/api
@@ -8,36 +6,101 @@ import 'react-native-url-polyfill/auto';
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://cmqffpfzsuamnquxmqac.supabase.co';
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_sb6jdYX1xZmgDR-7GpAJNA_GlwexNWk';
 
-// Custom storage for Expo (works on iOS/Android, falls back to AsyncStorage on web)
-const ExpoSecureStoreAdapter = {
-  getItem: async (key: string) => {
+// Check if we're running on web
+const isWeb = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+// Web-safe storage adapter
+// On web: uses localStorage (synchronous wrapper for async interface)
+// On native: uses expo-secure-store with AsyncStorage fallback
+const StorageAdapter = {
+  getItem: async (key: string): Promise<string | null> => {
+    if (isWeb) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch (e) {
+        console.warn('localStorage getItem error:', e);
+        return null;
+      }
+    }
+
+    // Native platform - try SecureStore first, fall back to AsyncStorage
     try {
-      return await SecureStore.getItemAsync(key);
+      const SecureStore = await import('expo-secure-store');
+      const AsyncStorage = await import('@react-native-async-storage/async-storage');
+      try {
+        return await SecureStore.getItemAsync(key);
+      } catch {
+        return await AsyncStorage.default.getItem(key);
+      }
     } catch {
-      // SecureStore not available on web, fall back to AsyncStorage
-      return await AsyncStorage.getItem(key);
+      return null;
     }
   },
-  setItem: async (key: string, value: string) => {
+  setItem: async (key: string, value: string): Promise<void> => {
+    if (isWeb) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn('localStorage setItem error:', e);
+      }
+      return;
+    }
+
+    // Native platform
     try {
-      await SecureStore.setItemAsync(key, value);
+      const SecureStore = await import('expo-secure-store');
+      try {
+        await SecureStore.setItemAsync(key, value);
+        return;
+      } catch {
+        // Fall through to AsyncStorage
+      }
     } catch {
-      // SecureStore not available on web, fall back to AsyncStorage
-      await AsyncStorage.setItem(key, value);
+      // SecureStore not available, fall through to AsyncStorage
+    }
+
+    try {
+      const AsyncStorage = await import('@react-native-async-storage/async-storage');
+      await AsyncStorage.default.setItem(key, value);
+    } catch (e) {
+      console.warn('AsyncStorage setItem error:', e);
     }
   },
-  removeItem: async (key: string) => {
+  removeItem: async (key: string): Promise<void> => {
+    if (isWeb) {
+      try {
+        window.localStorage.removeItem(key);
+      } catch (e) {
+        console.warn('localStorage removeItem error:', e);
+      }
+      return;
+    }
+
+    // Native platform
     try {
-      await SecureStore.deleteItemAsync(key);
+      const SecureStore = await import('expo-secure-store');
+      try {
+        await SecureStore.deleteItemAsync(key);
+        return;
+      } catch {
+        // Fall through to AsyncStorage
+      }
     } catch {
-      await AsyncStorage.removeItem(key);
+      // SecureStore not available, fall through to AsyncStorage
+    }
+
+    try {
+      const AsyncStorage = await import('@react-native-async-storage/async-storage');
+      await AsyncStorage.default.removeItem(key);
+    } catch (e) {
+      console.warn('AsyncStorage removeItem error:', e);
     }
   },
 };
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    storage: ExpoSecureStoreAdapter,
+    storage: StorageAdapter,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,

@@ -12,7 +12,8 @@
       "bundleIdentifier": "com.wisdominthedesert.app",
       "supportsTablet": true,
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "This app does not require microphone access."
+        "NSMicrophoneUsageDescription": "This app does not require microphone access.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -48,11 +49,13 @@
         }
       ],
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "baseUrl": "/desert-app"
     },
     "extra": {
       "router": {},

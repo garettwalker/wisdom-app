@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { Audio } from 'expo-av';
+import { Audio } from 'expo-audio';
 
 function formatTime(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
@@ -44,6 +44,46 @@ export default function SessionScreen() {
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [sessionComplete, setSessionComplete] = useState(false);
 
+  // Play two slow, soft dings with a delay between them
+  const playChime = useCallback(async () => {
+    try {
+      // Unload any existing sound
+      if (soundRef.current) {
+        await soundRef.current.unloadAsync();
+      }
+
+      // Load the chime sound
+      const { sound: firstSound } = await Audio.Sound.createAsync(
+        require('../assets/sounds/chime.wav'),
+        { volume: 0.7 } // Softer volume for gentle experience
+      );
+
+      soundRef.current = firstSound;
+      await firstSound.playAsync();
+
+      // Get sound duration to time the second ding
+      const status = await firstSound.getStatusAsync();
+      const soundDuration = status.durationMillis || 2000;
+
+      // Play second ding after the first one finishes (with small overlap)
+      setTimeout(async () => {
+        if (soundRef.current) {
+          await soundRef.current.unloadAsync();
+        }
+
+        const { sound: secondSound } = await Audio.Sound.createAsync(
+          require('../assets/sounds/chime.wav'),
+          { volume: 0.7 }
+        );
+
+        soundRef.current = secondSound;
+        await secondSound.playAsync();
+      }, soundDuration - 200); // Slight overlap for smoother transition
+    } catch (e) {
+      console.log('Error playing chime:', e);
+    }
+  }, []);
+
   const saveCompletedDay = useCallback(async (dayToSave: number) => {
     if (!user) {
       console.log('No user logged in, cannot save progress');
@@ -69,26 +109,6 @@ export default function SessionScreen() {
       console.log('Error saving completed day:', e);
     }
   }, [user, startSeconds]);
-
-  const playChime = useCallback(async () => {
-    try {
-      // Unload any existing sound
-      if (soundRef.current) {
-        await soundRef.current.unloadAsync();
-      }
-
-      // Load and play the chime
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/sounds/chime.wav'),
-        { volume: 1.0 }
-      );
-
-      soundRef.current = sound;
-      await sound.playAsync();
-    } catch (e) {
-      console.log('Error playing chime:', e);
-    }
-  }, []);
 
   const stopTimer = useCallback(() => {
     if (intervalRef.current) {

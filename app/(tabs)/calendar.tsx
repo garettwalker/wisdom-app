@@ -134,7 +134,7 @@ export default function CalendarScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.topBar}>
           <Pressable onPress={() => router.back()} hitSlop={10}>
             <Text style={styles.backText}>Back</Text>
@@ -217,7 +217,7 @@ export default function CalendarScreen() {
 
         <Text style={styles.sectionLabel}>All Days</Text>
 
-        <ScrollView contentContainerStyle={styles.list}>
+        <View style={styles.list}>
           {program.map((day) => {
             const entry = progressMap.get(day.day);
             const isDone = !!entry?.completed_at;
@@ -252,8 +252,8 @@ export default function CalendarScreen() {
               </Pressable>
             );
           })}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -268,6 +268,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1d9c5',
     paddingHorizontal: 24,
     paddingTop: 12,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    backgroundColor: '#e1d9c5',
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 30,
   },
   loadingText: {
     fontFamily: 'Lora_400Regular',
@@ -405,7 +412,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   list: {
-    paddingBottom: 30,
+    paddingBottom: 0,
   },
   row: {
     flexDirection: 'row',

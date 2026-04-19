@@ -39,10 +39,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
+          title: 'Instructions',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home-outline" size={24} color={color} />
+            <Ionicons name="book-outline" size={24} color={color} />
           ),
+          href: '/onboarding',
         }}
       />
       <Tabs.Screen
