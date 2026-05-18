@@ -1,0 +1,821 @@
+I am building a Christian prayer and meditation web app called Wilderness. Use the attached design board as the primary visual reference. Please revamp the current build to match this aesthetic while keeping the app simple, calm, responsive, and mobile-first.
+
+Brand identity
+
+App name:
+Wilderness
+
+Tagline:
+Beyond the noise, transformation begins.
+
+Clarifying line:
+Slow down with God right where you are.
+
+Brand promise:
+Wilderness helps people slow down, step away from distraction, and make space for God’s transforming work in the middle of everyday life.
+
+Core positioning:
+Wilderness is not about leaving your life behind. It is about slowing down enough to meet God honestly within it. Through guided journeys of Scripture, silence, and prayer, Wilderness helps users make space for transformation one ordinary day at a time.
+
+Important concept:
+The user does not need to leave their life to enter the wilderness. The wilderness is not a travel destination, retreat, adventure, or escape. It is a spiritual posture of slowing down, becoming honest before God, practicing silence, receiving Scripture, and returning to prayer in ordinary life.
+
+First program:
+Desert
+
+Desert description:
+A free 30-day journey through Scripture, silence, and prayer for ordinary life.
+
+Messaging guardrails
+
+Avoid language that sounds like travel, adventure, outdoor lifestyle, luxury retreat, or escapism.
+
+Avoid phrases such as:
+escape the world
+leave everything behind
+retreat from daily life
+go into the wild
+adventure awaits
+journey into the unknown
+
+Use language such as:
+right where you are
+in the middle of ordinary life
+slow down
+make space
+practice silence
+pause before God
+one ordinary day at a time
+not another demand on your attention
+a quieter rhythm
+make space for God
+return to prayer
+meet God honestly
+ordinary life
+five quiet minutes can become holy ground
+
+Tone:
+Quiet, reflective, honest, Christian, emotionally clear, non-hype, peaceful, minimal, and grounded. The app should feel gentle, spacious, and sacred without feeling overly churchy or ornate.
+
+Visual direction
+
+Use the attached image as the visual system reference.
+
+Overall style:
+Minimalist, warm, contemplative, modern, soft, earthy, mobile-first.
+The design should feel calm and premium but not flashy.
+Use generous whitespace, rounded corners, soft shadows, subtle borders, and quiet typography.
+The interface should feel like a peaceful prayer journal blended with a simple meditation app.
+
+Color palette:
+Use warm off-white and desert-inspired neutral tones.
+
+Suggested palette:
+Background ivory: #F6F3EC
+Warm sand: #E9E1D2
+Soft beige: #D6C8B3
+Muted taupe: #8A7A67
+Deep charcoal: #2B2A28
+
+Usage:
+Use #F6F3EC as the main page background.
+Use #E9E1D2 and #D6C8B3 for cards, chips, dividers, and warm accents.
+Use #8A7A67 for secondary text, borders, icons, and muted emphasis.
+Use #2B2A28 for primary text and primary buttons.
+Use white or near-white cards sparingly for contrast.
+Avoid bright colors, gradients that feel techy, harsh blacks, saturated blues, or neon accents.
+
+Typography:
+Use a refined serif for major headings and a clean sans-serif for body text.
+
+Preferred type pairing:
+Headings: Playfair Display or Cormorant Garamond
+Body: Inter or similar clean sans-serif
+
+Heading style:
+Large, elegant, calm, high contrast serif.
+Use sentence case, not all caps, except for small labels.
+
+Body style:
+Clean, readable, soft, and spacious.
+Use comfortable line height.
+Avoid dense blocks of text.
+
+Small labels:
+Use uppercase with letter spacing for labels like CURRENT PROGRAM, WILDERNESS, DESERT, SCRIPTURE, SILENCE, PRAYER.
+
+Layout principles
+
+Mobile-first:
+The app will primarily be used on phones. Prioritize a beautiful mobile layout first, then adapt to desktop.
+
+Spacing:
+Use generous padding throughout.
+Cards should have breathing room.
+Avoid cramped layouts.
+Avoid too much text visible at once.
+
+Cards:
+Rounded corners between 20px and 28px.
+Soft shadow or subtle border.
+Warm translucent or near-white card backgrounds.
+Cards should feel soft, not stark.
+
+Buttons:
+Primary buttons should be dark charcoal with white text.
+Large rounded pill style.
+Secondary buttons should have a warm border and transparent or ivory background.
+Disabled buttons should be warm beige or muted taupe with low contrast.
+
+Icons:
+Use simple thin-line icons.
+Use icons for Home, Calendar, Profile, Book, Bell, Leaf, Clock, Pencil, More, Settings.
+Icons should be minimal and quiet.
+Do not use heavy filled icon styles except when indicating active state.
+
+Imagery:
+Use abstract desert dunes as a soft visual metaphor, but avoid making the app feel like travel or adventure.
+Dunes should be subtle, warm, blurred, and used as background texture.
+The desert metaphor should feel spiritual and contemplative, not outdoorsy.
+No face-led imagery.
+No people-focused imagery.
+No heroic landscapes.
+No camping, hiking, mountains, or adventure visuals.
+
+Logo direction:
+Simple Wilderness wordmark.
+Optional circular mark with a W and abstract layered desert lines.
+Keep logo understated.
+Do not overuse the logo.
+
+Core app structure
+
+The app should include these primary areas:
+Home
+Calendar or Progress
+Session
+Reflection
+Profile or Settings
+Authentication
+
+Bottom navigation:
+Use a clean mobile bottom tab bar with 3 items:
+Home
+Calendar
+Profile
+
+Active tab:
+Use charcoal icon/text or muted taupe fill.
+Inactive tabs:
+Use taupe or beige.
+
+Page details
+
+1. Welcome / Landing / Sign-in page
+
+Purpose:
+Introduce Wilderness and allow the user to sign in or create an account.
+
+Visual direction:
+Full-screen mobile layout.
+Warm ivory background with a subtle dune image or gradient near the bottom.
+Centered content.
+Large W mark or simple Wilderness logo near the top.
+Serif headline.
+Minimal copy.
+Inputs and button stacked vertically.
+
+Content hierarchy:
+Small label:
+WILDERNESS
+
+Main headline:
+Beyond the noise, transformation begins.
+
+Clarifying line:
+Slow down with God right where you are.
+
+Supporting line:
+Make space for Scripture, silence, and prayer in the middle of ordinary life.
+
+Input fields:
+Email
+Password
+
+Primary button:
+Continue
+
+Secondary link:
+Don’t have an account? Sign Up
+
+Small footer copy:
+Your progress is saved to the cloud and syncs across devices.
+
+Design notes:
+Make inputs large, soft, rounded, and quiet.
+Keep the button dark charcoal.
+Use a warm dune image or abstract desert illustration at the bottom third.
+Ensure text is highly readable.
+Do not make the page feel like a travel app.
+
+2. Sign-up page
+
+Purpose:
+Create an account.
+
+Visual direction:
+Same as sign-in, with slightly more onboarding warmth.
+
+Content:
+Small label:
+WILDERNESS
+
+Headline:
+Begin with a quieter rhythm.
+
+Subtext:
+Create an account to save your progress through Desert and future guided programs.
+
+Fields:
+Name
+Email
+Password
+
+Primary button:
+Create Account
+
+Secondary link:
+Already have an account? Sign In
+
+Optional note:
+Desert is free to begin.
+
+Design notes:
+Keep layout identical to sign-in for consistency.
+Use calm, minimal copy.
+Avoid promotional language.
+
+3. Home page
+
+Purpose:
+Show the user where they are in Desert and invite them to continue.
+
+Visual direction:
+Ivory background.
+Top header with greeting, menu icon, and notification icon.
+Large soft card for current program.
+Upcoming days listed below.
+Bottom nav fixed at bottom.
+
+Header:
+Welcome back
+Slow down with God right where you are.
+
+Current program card:
+Small label:
+CURRENT PROGRAM
+
+Title:
+Desert
+
+Description:
+A free 30-day journey through Scripture, silence, and prayer.
+
+Progress:
+Day 1 of 30
+Use a thin progress bar in muted taupe.
+
+Primary button:
+Continue Day 1
+
+Secondary link:
+View Calendar
+
+Upcoming section:
+Title:
+Upcoming
+
+List items:
+Day 2
+Return
+
+Day 3
+Be Present
+
+Day 4
+Let Go
+
+Each list item:
+Rounded card
+Day number
+Theme
+Chevron icon
+
+Design notes:
+The home page should feel calm and useful.
+Do not overload it with stats.
+Do not show streaks or gamified achievements.
+Progress should feel supportive, not performance-based.
+Avoid shame-based language.
+
+4. Calendar / Progress page
+
+Purpose:
+Let the user move through the 30-day Desert program.
+
+Visual direction:
+Similar to the attached screenshot, but make it more polished.
+Top nav with Back, centered Progress title, and Instructions link.
+Show current day card.
+Show list of all days.
+
+Header:
+Back
+Progress
+Instructions
+
+Subheading:
+Desert: 30 Days of Silence and Return
+
+Current day card:
+Day 1
+Be still
+
+Verse:
+Be still, and know that I am God.
+Psalm 46:10
+
+Metadata:
+Anchor: Still
+5 min
+
+Status chip:
+Not completed
+
+Buttons:
+Prev
+Next
+Start Session
+
+Button behavior:
+Prev can appear disabled on Day 1.
+Next is secondary.
+Start Session is primary charcoal.
+
+All Days section:
+List all 30 days as cards.
+Each card should show:
+Day number
+Theme
+Completion circle or status icon
+
+Example:
+Day 1
+Be still
+
+Day 2
+Return
+
+Day 3
+Be Present
+
+Design notes:
+The selected day card should have a slightly darker border.
+Completed days can use a soft filled chip or check icon.
+Incomplete days should use a light outline circle.
+Avoid making progress feel like a productivity app.
+Use gentle visual indicators.
+
+5. Instructions page
+
+Purpose:
+Explain how Desert works.
+
+Visual direction:
+Simple scroll page with stacked cards.
+Serif title at top.
+Warm cards with subtle borders.
+This page should feel like guidance, not a manual.
+
+Header:
+30 Days Into the Desert
+
+Subtitle:
+A journey of silence and return
+
+Card 1:
+Welcome
+
+Copy:
+Desert is a 30-day guided practice of Scripture, silence, and prayer for ordinary life. Each day offers:
+
+A theme and anchor verse for meditation
+A timed session of silent prayer
+A simple anchor word to return to
+A reflection prompt to help you respond honestly
+
+Card 2:
+The Practice
+
+1. Read the Scripture slowly.
+2. Sit in silence for the appointed time.
+3. When distracted, gently return to your anchor word.
+4. When the chime sounds, reflect on what you noticed.
+5. Return at your own pace through all 30 days.
+
+Card 3:
+How to Use
+
+Select a day from the calendar to begin.
+Sessions range from 5 to 20 minutes.
+You can pause, reflect, and return without pressure.
+Your progress is saved as you complete each day.
+
+Card 4:
+A gentle reminder
+
+You do not have to perform for God.
+You do not have to feel focused to pray.
+You only need to return honestly.
+
+Design notes:
+Avoid language that says the user is entering a literal desert.
+Use Desert as the name of the spiritual practice, not a location.
+Keep the instructions short and pastoral.
+Use serif headings and sans-serif body copy.
+
+6. Session page
+
+Purpose:
+Guide the user through silent prayer for the selected day.
+
+Visual direction:
+This should be the most immersive and quiet page.
+Use a warm dune background at the bottom or full background with overlay.
+Keep UI minimal.
+Center the theme, Scripture, and timer.
+Use very few controls.
+
+Top controls:
+Close icon on left
+Settings icon on right
+
+Chip:
+Still
+
+Title:
+Be still
+
+Verse:
+Be still, and know that I am God.
+Psalm 46:10
+
+Timer:
+Large circular timer
+05:00
+
+Primary control:
+Pause
+
+Secondary control:
+End Session
+
+Design notes:
+Use a circular timer ring in muted taupe.
+The timer should feel peaceful, not athletic.
+Avoid bright progress rings.
+The page should feel like a sacred pause.
+Do not include streaks, points, badges, or productivity metrics.
+Make the user feel invited, not measured.
+
+7. Reflection page
+
+Purpose:
+Invite the user to write a simple reflection after the prayer session.
+
+Visual direction:
+Light ivory background.
+Simple header with Back and Done.
+Prompt at top.
+Large text area.
+Optional feeling chips.
+Prayer response box.
+
+Header:
+Reflection
+Done
+
+Prompt:
+What is one word or phrase that stood out to you today?
+
+Text area placeholder:
+Write your reflection...
+
+Character counter:
+0/500
+
+Feeling section:
+Today I feel
+
+Chips:
+Grateful
+Peaceful
+Overwhelmed
+Tired
+Anxious
+Hopeful
+Other
+
+Prayer section:
+Prayer
+
+Prompt:
+Write a prayer or honest response to God.
+
+Text area placeholder:
+Lord...
+
+Primary action:
+Complete Day
+
+Design notes:
+Keep reflection private and quiet.
+Do not make it feel like journaling for content creation.
+Do not include social sharing.
+Focus on honesty with God.
+Feeling chips should be optional and soft.
+
+8. Program intro page for Desert
+
+Purpose:
+Introduce the Desert program before starting.
+
+Visual direction:
+This can use a full-screen warm dune visual similar to the design board.
+Use Wilderness branding and three simple pillars.
+
+Top:
+W logo or Wilderness wordmark
+
+Label:
+WILDERNESS
+
+Headline:
+Beyond the noise, transformation begins.
+
+Clarifying line:
+Slow down with God right where you are.
+
+Program card or section:
+Desert
+
+Description:
+A free 30-day journey through Scripture, silence, and prayer for ordinary life.
+
+Three pillars:
+Scripture
+Receive truth for today
+
+Silence
+Practice stillness
+
+Prayer
+Respond honestly
+
+Primary button:
+Begin Desert
+
+Design notes:
+This page can be more visually expressive but still restrained.
+Use a warm desert dune background as metaphor.
+Do not make it feel like a retreat brochure.
+Keep the focus on ordinary life and daily practice.
+
+9. Day detail page
+
+Purpose:
+Show one day’s theme before session begins.
+
+Visual direction:
+A smaller version of the Progress current day card with more context.
+
+Content:
+Day 1
+Be still
+
+Verse:
+Be still, and know that I am God.
+Psalm 46:10
+
+Anchor:
+Still
+
+Duration:
+5 min
+
+Brief reflection:
+Today’s practice is a simple return to stillness. You are not trying to empty yourself or perform focus. You are making room to notice God’s presence right where you are.
+
+Primary button:
+Start Session
+
+Secondary link:
+Back to Calendar
+
+Design notes:
+Keep copy brief.
+Use pastoral clarity.
+Avoid overexplaining.
+
+10. Settings / Profile page
+
+Purpose:
+Basic account and app settings.
+
+Visual direction:
+Simple cards and list rows.
+No clutter.
+
+Header:
+Profile
+
+Sections:
+Account
+Name
+Email
+
+Preferences
+Session sound
+Reminder time
+Text size
+
+Progress
+Current program: Desert
+Completed days
+Reset Desert progress
+
+Support
+About Wilderness
+Contact
+Privacy
+
+Design notes:
+Keep settings functional and minimal.
+Avoid complex customization early.
+Use rounded list items and soft dividers.
+
+11. Empty states and messages
+
+Use gentle, non-shaming language.
+
+Missed a day:
+You can return today.
+Prayer is not a streak to protect. It is a place to come back to.
+
+No reflection written:
+Nothing saved yet.
+A single honest sentence is enough.
+
+Completed day:
+Day completed.
+Return tomorrow, or sit a little longer if you need to.
+
+Program complete:
+You completed Desert.
+This is not the end of the practice. It is a beginning of a quieter rhythm.
+
+Error message:
+Something did not load.
+Take a breath and try again.
+
+Design components
+
+Buttons:
+Primary:
+Charcoal fill #2B2A28
+White text
+Rounded pill
+Height around 52px to 60px on mobile
+
+Secondary:
+Transparent or ivory fill
+Taupe border
+Charcoal text
+Rounded pill
+
+Tertiary:
+Soft beige fill
+Muted taupe text
+Rounded pill
+
+Cards:
+Background: near white or warm ivory
+Border: #D6C8B3 at low opacity
+Shadow: soft and subtle
+Radius: 20px to 28px
+Padding: 20px to 28px
+
+Chips:
+Soft beige backgrounds
+Muted taupe or charcoal text
+Rounded pill
+Small but readable
+
+Status states:
+Not completed:
+Soft beige chip
+
+In progress:
+Light taupe chip with small circular icon
+
+Completed:
+Muted taupe fill with checkmark and white or ivory text
+
+Inputs:
+Rounded corners
+Warm border
+Large padding
+Subtle focus state in muted taupe
+No harsh blue focus ring unless required for accessibility
+
+Accessibility
+
+Make sure contrast is readable.
+Support keyboard navigation.
+Use semantic HTML.
+Buttons must be large enough to tap easily.
+Do not rely on color alone for status.
+Ensure all icons have accessible labels.
+Use responsive layouts for small phones.
+
+Implementation preference
+
+Please rebuild the UI with reusable components:
+AppShell
+BottomNav
+PageHeader
+ProgramCard
+DayCard
+StatusChip
+PrimaryButton
+SecondaryButton
+TextInput
+TextArea
+SessionTimer
+ReflectionForm
+InstructionCard
+
+Keep the code clean and simple.
+Avoid unnecessary animation.
+Small transitions are okay:
+soft fade
+gentle slide
+button press state
+card hover on desktop
+
+Do not add noisy animations, confetti, gamification, streaks, badges, or social features.
+
+Desired feeling
+
+When someone opens Wilderness, it should feel like:
+a quiet pause
+a warm room
+a simple invitation
+a place to breathe
+a practice of returning to God
+
+It should not feel like:
+a productivity tracker
+a wellness influencer brand
+a hiking or outdoor app
+a luxury retreat
+a social media platform
+a gamified habit tracker
+
+Key copy to use throughout
+
+Wilderness
+Beyond the noise, transformation begins.
+Slow down with God right where you are.
+
+Not a place to escape to. A practice of slowing down with God right where you are.
+
+You do not have to leave your life to make space for God.
+
+Make space for God in the middle of your real life.
+
+A quiet daily practice for ordinary life.
+
+Not an escape from life, but a slower way through it.
+
+Five quiet minutes can become holy ground.
+
+Slow down where you are. Make space for what God is forming.
+
+The wilderness is not a destination. It is a place of honesty with God.
+
+Desert is a free 30-day journey through Scripture, silence, and prayer for ordinary life.
+
+Final instruction
+
+Use the attached design board as the visual target. Rework the existing app screens so they feel more like the reference: warm, minimal, premium, simple, slow, Christian, and emotionally clear. Keep all language aligned to ordinary life, Scripture, silence, prayer, and transformation with God right where the user is.

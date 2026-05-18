@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" fill="none">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1920" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#F6F3EC"/>
+    <stop offset="0.48" stop-color="#EFE7DA"/>
+    <stop offset="1" stop-color="#B0906B"/>
+  </linearGradient>
+  <radialGradient id="glow" cx="50%" cy="25%" r="55%">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.80"/>
+    <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="dune1" x1="0" y1="1056" x2="1080" y2="1920" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#E6D7C2"/>
+    <stop offset="1" stop-color="#9B7D5E"/>
+  </linearGradient>
+  <linearGradient id="dune2" x1="0" y1="1056" x2="1080" y2="1920" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#CBB69B"/>
+    <stop offset="1" stop-color="#6F5947"/>
+  </linearGradient>
+  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1080" height="1920" fill="url(#bg)"/>
+<rect width="1080" height="1920" fill="url(#glow)"/>
+<circle cx="842" cy="346" r="81" fill="#E9E1D2" opacity="0.95"/>
+<path d="M0 1094 C 162 960, 270 1114, 421 1018 C 605 902, 724 1152, 1080 960 L 1080 1920 L 0 1920 Z" fill="#DCCBB4" opacity="0.72"/>
+<path d="M0 1267 C 140 1152, 292 1325, 443 1190 C 605 1056, 778 1344, 1080 1152 L 1080 1920 L 0 1920 Z" fill="url(#dune1)" opacity="0.86"/>
+<path d="M0 1402 C 194 1229, 346 1517, 551 1306 C 734 1114, 886 1536, 1080 1325 L 1080 1920 L 0 1920 Z" fill="url(#dune2)" opacity="0.88"/>
+<path d="M0 1574 C 248 1402, 421 1728, 659 1459 C 864 1229, 983 1690, 1080 1536 L 1080 1920 L 0 1920 Z" fill="#5B4738" opacity="0.46"/>
+<path d="M0 1382 C 248 1306, 486 1613, 1080 1363" stroke="#F4E9D9" stroke-opacity="0.20" stroke-width="2"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+<circle cx="256.0" cy="256.0" r="233.0" fill="#F6F3EC" stroke="#2B2A28" stroke-width="12"/>
+<clipPath id="clip"><circle cx="256.0" cy="256.0" r="220.2"/></clipPath>
+<g clip-path="url(#clip)">
+<path d="M0 328 C 92 282, 159 369, 256 312 C 348 256, 399 358, 512 297 L 512 512 L 0 512 Z" fill="#D6C8B3"/>
+<path d="M0 389 C 113 343, 200 440, 307 369 C 389 317, 451 420, 512 379 L 512 512 L 0 512 Z" fill="#8A7A67" opacity=".90"/>
+<path d="M0 338 C 123 307, 200 384, 512 317" stroke="#2B2A28" stroke-width="7" opacity=".75"/>
+<path d="M0 399 C 123 364, 205 451, 512 389" stroke="#2B2A28" stroke-width="7" opacity=".75"/>
+</g>
+<text x="50%" y="220" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="159" fill="#2B2A28">W</text>
+</svg>

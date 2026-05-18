@@ -1,0 +1,164 @@
+{
+  "palette": {
+    "sand_light": "#F6F3EC",
+    "cream": "#E9E1D2",
+    "sand": "#D6C8B3",
+    "taupe": "#8A7A67",
+    "charcoal": "#2B2A28"
+  },
+  "assets": [
+    {
+      "name": "brand.logoMark",
+      "file": "brand/logo-mark.svg",
+      "use": "Primary round W logo. Use in app header, splash screen, profile, favicon, and small brand moments."
+    },
+    {
+      "name": "brand.wordmarkWithTagline",
+      "file": "brand/wordmark-with-tagline.svg",
+      "use": "Large brand lockup. Use on marketing header, app store preview, and optional landing pages. Do not use inside small mobile nav."
+    },
+    {
+      "name": "login.background",
+      "file": "backgrounds/login.background.svg",
+      "use": "Full screen desert background for login and welcome/onboarding screen. Layer copy and CTA over it."
+    },
+    {
+      "name": "session.background",
+      "file": "backgrounds/session.background.svg",
+      "use": "Full screen desert background for the stillness timer/session screen. Keep timer and controls centered."
+    },
+    {
+      "name": "program.desertHero",
+      "file": "illustrations/desert-landscape-wide.svg",
+      "use": "Wide landscape art for the Desert program overview, program cards, or empty states."
+    },
+    {
+      "name": "card.desertLandscape",
+      "file": "illustrations/desert-landscape-card.svg",
+      "use": "Smaller card version for dashboard cards, progress cards, and feature panels."
+    },
+    {
+      "name": "status.notCompleted",
+      "file": "ui/status-chip-not-completed.svg",
+      "use": "Status chip for unfinished day cards or lesson detail."
+    },
+    {
+      "name": "status.completed",
+      "file": "ui/status-chip-completed.svg",
+      "use": "Status chip for completed days or reflection steps."
+    },
+    {
+      "name": "status.inProgress",
+      "file": "ui/status-chip-in-progress.svg",
+      "use": "Status chip for active session or day in progress."
+    },
+    {
+      "name": "icon.home",
+      "file": "icons/home.svg",
+      "use": "Line icon for home actions or navigation."
+    },
+    {
+      "name": "icon.calendar",
+      "file": "icons/calendar.svg",
+      "use": "Line icon for calendar actions or navigation."
+    },
+    {
+      "name": "icon.profile",
+      "file": "icons/profile.svg",
+      "use": "Line icon for profile actions or navigation."
+    },
+    {
+      "name": "icon.book",
+      "file": "icons/book.svg",
+      "use": "Line icon for book actions or navigation."
+    },
+    {
+      "name": "icon.bell",
+      "file": "icons/bell.svg",
+      "use": "Line icon for bell actions or navigation."
+    },
+    {
+      "name": "icon.leaf",
+      "file": "icons/leaf.svg",
+      "use": "Line icon for leaf actions or navigation."
+    },
+    {
+      "name": "icon.clock",
+      "file": "icons/clock.svg",
+      "use": "Line icon for clock actions or navigation."
+    },
+    {
+      "name": "icon.pencil",
+      "file": "icons/pencil.svg",
+      "use": "Line icon for pencil actions or navigation."
+    },
+    {
+      "name": "icon.menu",
+      "file": "icons/menu.svg",
+      "use": "Line icon for menu actions or navigation."
+    },
+    {
+      "name": "icon.settings",
+      "file": "icons/settings.svg",
+      "use": "Line icon for settings actions or navigation."
+    },
+    {
+      "name": "icon.back",
+      "file": "icons/back.svg",
+      "use": "Line icon for back actions or navigation."
+    },
+    {
+      "name": "icon.close",
+      "file": "icons/close.svg",
+      "use": "Line icon for close actions or navigation."
+    },
+    {
+      "name": "icon.more",
+      "file": "icons/more.svg",
+      "use": "Line icon for more actions or navigation."
+    },
+    {
+      "name": "icon.check",
+      "file": "icons/check.svg",
+      "use": "Line icon for check actions or navigation."
+    },
+    {
+      "name": "icon.timer",
+      "file": "icons/timer.svg",
+      "use": "Line icon for timer actions or navigation."
+    }
+  ],
+  "updated_assets_v2": {
+    "brand.logoMarkArtistic": {
+      "files": [
+        "brand/logo-mark-artistic-flare.png",
+        "brand/logo-mark-artistic-flare.svg"
+      ],
+      "use": "Primary app logo mark, splash screen mark, app icon source. This version matches the more hand-crafted W and circle dunes mark from the reference."
+    },
+    "brand.wArtisticFlare": {
+      "files": [
+        "brand/w-artistic-flare.png"
+      ],
+      "use": "Standalone W mark for large centered brand treatments on login, splash, and welcome screens."
+    },
+    "session.backgroundRealisticDunes": {
+      "files": [
+        "backgrounds/session.background.realistic-dunes.png"
+      ],
+      "use": "Primary full-screen background for the stillness timer/session screen. Use behind the timer and session controls."
+    },
+    "login.backgroundRealisticDunes": {
+      "files": [
+        "backgrounds/login.background.realistic-dunes.png"
+      ],
+      "use": "Primary full-screen background for login, welcome, and onboarding pages when a realistic desert feel is desired."
+    },
+    "program.desertRealisticWide": {
+      "files": [
+        "illustrations/desert-landscape-realistic-wide.png"
+      ],
+      "use": "Wide hero/card desert image for program cards, Desert overview, and marketing panels."
+    }
+  }
+}

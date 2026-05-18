@@ -1,10 +1,24 @@
+import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { Tabs, router, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function TabLayout() {
+  const [playfairLoaded] = usePlayfairFonts({
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_700Bold,
+  });
+
+  const [interLoaded] = useInterFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+  });
+
+  const fontsLoaded = playfairLoaded && interLoaded;
+
   const { user, loading } = useAuth();
   const [checking, setChecking] = useState(true);
 
@@ -17,10 +31,10 @@ export default function TabLayout() {
     }, [loading, user])
   );
 
-  if (checking || loading) {
+  if (checking || loading || !fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6E5A3C" />
+        <ActivityIndicator size="large" color="#8A7A67" />
       </View>
     );
   }
@@ -30,8 +44,8 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: '#6E5A3C',
-        tabBarInactiveTintColor: '#9A8F7A',
+        tabBarActiveTintColor: '#2B2A28',
+        tabBarInactiveTintColor: '#8A7A67',
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarItemStyle: styles.tabBarItem,
       }}
@@ -39,11 +53,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Instructions',
+          title: 'Home',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="book-outline" size={24} color={color} />
+            <Image
+              source={require('../../assets/wilderness_assets_refined/icons/home.png')}
+              style={[styles.tabIcon, { tintColor: color }]}
+            />
           ),
-          href: '/onboarding',
         }}
       />
       <Tabs.Screen
@@ -51,16 +67,22 @@ export default function TabLayout() {
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="calendar-outline" size={24} color={color} />
+            <Image
+              source={require('../../assets/wilderness_assets_refined/icons/calendar.png')}
+              style={[styles.tabIcon, { tintColor: color }]}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="settings-outline" size={24} color={color} />
+            <Image
+              source={require('../../assets/wilderness_assets_refined/icons/profile.png')}
+              style={[styles.tabIcon, { tintColor: color }]}
+            />
           ),
         }}
       />
@@ -70,25 +92,30 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#F4F1EA',
-    borderTopColor: '#D8D1C2',
+    backgroundColor: '#F6F3EC',
+    borderTopColor: '#D6C8B3',
     borderTopWidth: 1,
     paddingTop: 8,
     paddingBottom: 8,
     height: 88,
   },
   tabBarLabel: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '500',
     marginTop: 4,
   },
   tabBarItem: {
     paddingTop: 4,
   },
+  tabIcon: {
+    width: 24,
+    height: 24,
+  },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#e1d9c5',
+    backgroundColor: '#F6F3EC',
   },
 });

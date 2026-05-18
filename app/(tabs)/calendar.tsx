@@ -1,7 +1,11 @@
+import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { Link, router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
+  ImageBackground,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -9,6 +13,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { program } from '../../data/program';
@@ -20,14 +25,28 @@ type ProgressEntry = {
 };
 
 export default function CalendarScreen() {
+  const [playfairLoaded] = usePlayfairFonts({
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_700Bold,
+  });
+
+  const [interLoaded] = useInterFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+  });
+
+  const fontsLoaded = playfairLoaded && interLoaded;
+
   const { user } = useAuth();
   const params = useLocalSearchParams<{ selectedDay?: string }>();
   const [progressMap, setProgressMap] = useState<Map<number, ProgressEntry>>(new Map());
   const [loading, setLoading] = useState(true);
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
-  // Initialize selected day from params or default to program[0]
-  const initialDayNumber = params.selectedDay ? Number(params.selectedDay) : 1;
-  const initialDay = program.find((d) => d.day === initialDayNumber) || program[0];
+  // Initialize selected day from params, or will be set to next incomplete after loading
+  const initialDayNumber = params.selectedDay ? Number(params.selectedDay) : null;
+  const initialDay = initialDayNumber ? program.find((d) => d.day === initialDayNumber) || program[0] : program[0];
   const [selectedDay, setSelectedDay] = useState(initialDay);
 
   const loadProgress = React.useCallback(async () => {
@@ -60,6 +79,20 @@ export default function CalendarScreen() {
     }
   }, [user]);
 
+  // After progress loads, select the next incomplete day (if no specific day in params)
+  React.useEffect(() => {
+    if (!loading && !initialDayNumber) {
+      // Find the first incomplete day
+      const nextDay = program.find((day) => {
+        const entry = progressMap.get(day.day);
+        return !entry?.completed_at;
+      });
+      if (nextDay) {
+        setSelectedDay(nextDay);
+      }
+    }
+  }, [loading, progressMap, initialDayNumber]);
+
   // Reload progress when screen comes into focus
   useFocusEffect(
     React.useCallback(() => {
@@ -75,15 +108,22 @@ export default function CalendarScreen() {
   const selectedIsComplete = !!selectedEntry?.completed_at;
   const selectedJournal = selectedEntry?.journal_entry;
 
+  const selectDay = (day: typeof program[0]) => {
+    setSelectedDay(day);
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+  };
+
   const goPrev = () => {
     if (selectedIndex > 0) {
       setSelectedDay(program[selectedIndex - 1]);
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
   };
 
   const goNext = () => {
     if (selectedIndex < program.length - 1) {
       setSelectedDay(program[selectedIndex + 1]);
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
   };
 
@@ -110,8 +150,11 @@ export default function CalendarScreen() {
     });
   };
 
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
+
   if (!user) {
-    // Should not happen due to auth check, but handle it
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
@@ -125,7 +168,7 @@ export default function CalendarScreen() {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="#6E5A3C" />
+          <ActivityIndicator size="large" color="#8A7A67" />
           <Text style={styles.loadingText}>Loading your progress...</Text>
         </View>
       </SafeAreaView>
@@ -133,32 +176,39 @@ export default function CalendarScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <ImageBackground
+      source={require('../../assets/wilderness_assets_refined/backgrounds/login.background1.png')}
+      style={styles.backgroundImage}
+      imageStyle={styles.backgroundImageStyle}
+    >
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollContent}>
         <View style={styles.topBar}>
           <Pressable onPress={() => router.back()} hitSlop={10}>
-            <Text style={styles.backText}>Back</Text>
+            <Ionicons name="arrow-back" size={20} color="#8A7A67" />
           </Pressable>
 
-          <Text style={styles.title}>Progress</Text>
+          <Text style={styles.title}>Calendar</Text>
 
           <Link href="/onboarding" style={styles.instructionsLink}>
-            <Text style={styles.instructionsText}>Instructions</Text>
+            <Text style={styles.instructionsText}>Help</Text>
           </Link>
         </View>
 
-        <Text style={styles.subtitle}>30 Days Into the Desert</Text>
+        <Text style={styles.subtitle}>Desert: 30 Days of Silence and Return</Text>
 
         <View style={styles.featureCard}>
-          <Text style={styles.featureDay}>Day {selectedDay.day}</Text>
+          <Text style={styles.featureDay}>DAY {selectedDay.day}</Text>
           <Text style={styles.featureTheme}>{selectedDay.theme}</Text>
 
-          <Text style={styles.featureVerse}>{selectedDay.text}</Text>
+          <Text style={styles.featureVerse}>&quot;{selectedDay.text}&quot;</Text>
 
-          <Text style={styles.featureMeta}>
-            Anchor: {selectedDay.anchor} • {Math.round(selectedDay.duration / 60)}
-            min
-          </Text>
+          <View style={styles.featureMeta}>
+            <View style={styles.metaChip}>
+              <Text style={styles.metaChipText}>{selectedDay.anchor}</Text>
+            </View>
+            <Text style={styles.metaText}>{Math.round(selectedDay.duration / 60)} min</Text>
+          </View>
 
           <Text
             style={[
@@ -227,7 +277,7 @@ export default function CalendarScreen() {
             return (
               <Pressable
                 key={day.day}
-                onPress={() => setSelectedDay(day)}
+                onPress={() => selectDay(day)}
                 style={[
                   styles.row,
                   isSelected && styles.rowSelected,
@@ -238,48 +288,54 @@ export default function CalendarScreen() {
                     <Text style={styles.dayLabel}>Day {day.day}</Text>
                     {hasJournal && <View style={styles.journalDot} />}
                   </View>
-                  <Text style={styles.verse}>{day.anchor}</Text>
+                  <Text style={styles.verse}>{day.theme}</Text>
                 </View>
 
-                <Text
+                <View
                   style={[
-                    styles.status,
-                    isDone ? styles.done : styles.pending,
+                    styles.statusCircle,
+                    isDone ? styles.doneCircle : styles.pendingCircle,
                   ]}
                 >
-                  {isDone ? '✓' : '○'}
-                </Text>
+                  {isDone && <Ionicons name="checkmark" size={14} color="#2B2A28" />}
+                </View>
               </Pressable>
             );
           })}
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  backgroundImageStyle: {
+    resizeMode: 'cover',
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: '#e1d9c5',
+    backgroundColor: 'transparent',
   },
   container: {
     flex: 1,
-    backgroundColor: '#e1d9c5',
+    backgroundColor: '#F6F3EC',
     paddingHorizontal: 24,
     paddingTop: 12,
   },
   scrollContent: {
     flexGrow: 1,
-    backgroundColor: '#e1d9c5',
     paddingHorizontal: 24,
     paddingTop: 12,
     paddingBottom: 30,
   },
   loadingText: {
-    fontFamily: 'Lora_400Regular',
-    color: '#9A8F7A',
-    fontSize: 16,
+    fontFamily: 'Inter_400Regular',
+    color: '#8A7A67',
+    fontSize: 15,
     textAlign: 'center',
     marginTop: 20,
   },
@@ -287,86 +343,123 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 12,
+    paddingHorizontal: 4,
   },
   instructionsLink: {
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
   instructionsText: {
-    color: '#6E5A3C',
+    fontFamily: 'Inter_500Medium',
+    color: '#8A7A67',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   backText: {
-    color: '#9A8F7A',
+    color: '#8A7A67',
     fontSize: 14,
     fontWeight: '600',
   },
   title: {
-    color: '#2F2A24',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#2B2A28',
     fontSize: 28,
     fontWeight: '700',
   },
   subtitle: {
-    color: '#9A8F7A',
-    fontSize: 14,
-    marginBottom: 16,
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#8A7A67',
+    fontSize: 15,
+    marginBottom: 20,
   },
   featureCard: {
-    backgroundColor: '#E8E3D9',
-    borderRadius: 20,
-    padding: 18,
-    marginBottom: 18,
+    backgroundColor: 'rgba(246, 243, 236, 0.75)',
+    borderRadius: 24,
+    padding: 22,
+    marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#D8D1C2',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
   },
   featureDay: {
-    color: '#9A8F7A',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 6,
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 1.5,
+    marginBottom: 8,
+    textTransform: 'uppercase',
   },
   featureTheme: {
-    color: '#2F2A24',
-    fontSize: 22,
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#2B2A28',
+    fontSize: 24,
     fontWeight: '700',
-    marginBottom: 12,
+    marginBottom: 14,
+    lineHeight: 30,
   },
   featureVerse: {
-    color: '#6E5A3C',
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#8A7A67',
     fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 12,
+    lineHeight: 26,
+    marginBottom: 16,
+    fontStyle: 'italic',
   },
   featureMeta: {
-    color: '#9A8F7A',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  metaChip: {
+    backgroundColor: '#D6C8B3',
+    borderRadius: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+  },
+  metaChipText: {
+    fontFamily: 'Inter_500Medium',
+    color: '#2B2A28',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  metaText: {
+    fontFamily: 'Inter_400Regular',
+    color: '#8A7A67',
     fontSize: 13,
-    marginBottom: 8,
   },
   featureStatus: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 13,
-    fontWeight: '700',
-    marginBottom: 14,
+    fontWeight: '500',
+    marginBottom: 16,
   },
   journalPreview: {
-    backgroundColor: '#F4F1EA',
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 14,
-    cursor: 'pointer',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
   },
   journalLabel: {
-    fontFamily: 'Lora_700Bold',
-    color: '#9A8F7A',
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.5,
     marginBottom: 8,
+    textTransform: 'uppercase',
   },
   journalText: {
-    fontFamily: 'Lora_400Regular',
-    color: '#6E5A3C',
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#2B2A28',
     fontSize: 14,
     lineHeight: 22,
   },
@@ -374,60 +467,74 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   navButton: {
     flex: 1,
-    backgroundColor: '#F4F1EA',
-    borderRadius: 16,
-    paddingVertical: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 18,
+    paddingVertical: 14,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#D8D1C2',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
   },
   navButtonDisabled: {
     opacity: 0.4,
   },
   navButtonText: {
-    color: '#6E5A3C',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   startButton: {
-    backgroundColor: '#3E3A34',
-    borderRadius: 18,
-    paddingVertical: 14,
+    backgroundColor: '#2B2A28',
+    borderRadius: 26,
+    paddingVertical: 16,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
   startButtonText: {
+    fontFamily: 'Inter_600SemiBold',
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   sectionLabel: {
-    color: '#9A8F7A',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginBottom: 10,
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1.2,
+    marginBottom: 12,
+    textTransform: 'uppercase',
   },
   list: {
-    paddingBottom: 0,
+    paddingBottom: 20,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#E8E3D9',
-    borderRadius: 16,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    marginBottom: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    borderRadius: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E8E3D9',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
   },
   rowSelected: {
-    borderColor: '#6E5A3C',
+    borderColor: '#8A7A67',
   },
   left: {
     flex: 1,
@@ -439,34 +546,42 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   journalDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#6E5A3C',
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#8A7A67',
     marginLeft: 8,
   },
   dayLabel: {
-    color: '#2F2A24',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#2B2A28',
     fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 4,
+    fontWeight: '600',
+    marginBottom: 3,
   },
   verse: {
-    color: '#6E5A3C',
-    fontSize: 13,
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#8A7A67',
+    fontSize: 14,
   },
-  status: {
-    fontSize: 22,
-    fontWeight: '700',
+  statusCircle: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
   },
-  done: {
-    color: '#6E5A3C',
+  doneCircle: {
+    backgroundColor: '#D6C8B3',
+    borderColor: '#D6C8B3',
   },
-  pending: {
-    color: '#9A8F7A',
+  pendingCircle: {
+    backgroundColor: 'transparent',
+    borderColor: '#D6C8B3',
   },
   buttonPressed: {
     opacity: 0.9,
-    transform: [{ scale: 0.99 }],
+    transform: [{ scale: 0.98 }],
   },
 });

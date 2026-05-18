@@ -1,7 +1,11 @@
-import { Lora_400Regular, Lora_700Bold, useFonts } from '@expo-google-fonts/lora';
+import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { router } from 'expo-router';
 import React from 'react';
 import {
+  Image,
+  ImageBackground,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -14,50 +18,78 @@ import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 
 export default function SettingsScreen() {
-  const [fontsLoaded] = useFonts({
-    Lora_400Regular,
-    Lora_700Bold,
+  const [playfairLoaded] = usePlayfairFonts({
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_700Bold,
   });
+
+  const [interLoaded] = useInterFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+  });
+
+  const fontsLoaded = playfairLoaded && interLoaded;
 
   const { user, signOut } = useAuth();
 
   const handleResetProgress = async () => {
-    Alert.alert(
-      'Reset Progress',
-      'Are you sure you want to reset all your progress? This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Reset',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await supabase.from('user_progress').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-              Alert.alert('Success', 'Your progress has been reset.');
-            } catch {
-              Alert.alert('Error', 'Failed to reset progress.');
-            }
-          },
-        },
-      ]
-    );
+    const confirmReset = Platform.OS === 'web'
+      ? window.confirm('Are you sure you want to reset all your progress? This cannot be undone.')
+      : await new Promise<boolean>((resolve) => {
+          Alert.alert(
+            'Reset Progress',
+            'Are you sure you want to reset all your progress? This cannot be undone.',
+            [
+              { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
+              { text: 'Reset', style: 'destructive', onPress: () => resolve(true) },
+            ]
+          );
+        });
+
+    if (!confirmReset || !user) return;
+
+    try {
+      const { error } = await supabase
+        .from('user_progress')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      if (Platform.OS === 'web') {
+        window.alert('Your progress has been reset.');
+      } else {
+        Alert.alert('Success', 'Your progress has been reset.');
+      }
+    } catch (e) {
+      console.error('Error resetting progress:', e);
+      if (Platform.OS === 'web') {
+        window.alert('Failed to reset progress.');
+      } else {
+        Alert.alert('Error', 'Failed to reset progress.');
+      }
+    }
   };
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Sign Out',
-      'Are you sure you want to sign out? Your progress will be saved and you can sign back in anytime.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Sign Out',
-          onPress: async () => {
-            await signOut();
-            router.replace('/login');
-          },
-        },
-      ]
-    );
+  const handleLogout = async () => {
+    const confirmSignOut = Platform.OS === 'web'
+      ? window.confirm('Are you sure you want to sign out? Your progress will be saved and you can sign back in anytime.')
+      : await new Promise<boolean>((resolve) => {
+          Alert.alert(
+            'Sign Out',
+            'Are you sure you want to sign out? Your progress will be saved and you can sign back in anytime.',
+            [
+              { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
+              { text: 'Sign Out', onPress: () => resolve(true) },
+            ]
+          );
+        });
+
+    if (!confirmSignOut) return;
+
+    await signOut();
+    router.replace('/login');
   };
 
   if (!fontsLoaded) {
@@ -65,185 +97,201 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Settings</Text>
-        <Text style={styles.subtitle}>Manage your desert journey</Text>
+    <ImageBackground
+      source={require('../../assets/wilderness_assets_refined/backgrounds/login.background.new.png')}
+      style={styles.background}
+      imageStyle={styles.backgroundImage}
+    >
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image
+            source={require('../../assets/wilderness_assets_refined/brand/logo-mark-artistic-flare-1.png')}
+            style={styles.brandImage}
+            resizeMode="contain"
+          />
+          <Text style={styles.brandLabel}>WILDERNESS</Text>
+          <Text style={styles.title}>Profile</Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account</Text>
 
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Signed In</Text>
-            <Text style={styles.cardText}>
-              {user?.email || 'Not signed in'}
-            </Text>
-            <Pressable
-              style={({ pressed }) => [
-                styles.logoutButton,
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={handleLogout}
-            >
-              <Text style={styles.logoutButtonText}>Sign Out</Text>
-            </Pressable>
+            <View style={styles.card}>
+              <Text style={styles.cardLabel}>Email</Text>
+              <Text style={styles.cardValue}>
+                {user?.email || 'Not signed in'}
+              </Text>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.logoutButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.logoutButtonText}>Sign Out</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Program</Text>
 
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>30 Days Into the Desert</Text>
-            <Text style={styles.cardText}>
-              A journey of silence and reflection. Each day offers a new theme
-              and anchor verse to meditate on during your session.
-            </Text>
+            <View style={styles.card}>
+              <Text style={styles.cardLabel}>Current Program</Text>
+              <Text style={styles.cardValue}>Desert</Text>
+              <Text style={styles.cardDescription}>
+                A free 30-day journey through Scripture, silence, and prayer for ordinary life.
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Data</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Data</Text>
 
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Your Progress</Text>
-            <Text style={styles.cardText}>
-              Track your completion of each day&apos;s session. Your progress
-              is synced to the cloud and saved across devices.
-            </Text>
-            <Pressable
-              style={({ pressed }) => [
-                styles.resetButton,
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={handleResetProgress}
-            >
-              <Text style={styles.resetButtonText}>Reset All Progress</Text>
-            </Pressable>
+            <View style={styles.card}>
+              <Text style={styles.cardLabel}>Your Progress</Text>
+              <Text style={styles.cardDescription}>
+                Track your completion of each day&apos;s session. Your progress
+                is synced to the cloud and saved across devices.
+              </Text>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.resetButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={handleResetProgress}
+              >
+                <Text style={styles.resetButtonText}>Reset All Progress</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>App Info</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>About</Text>
 
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Version</Text>
-            <Text style={styles.infoValue}>1.0.0</Text>
+            <View style={styles.card}>
+              <Text style={styles.cardLabel}>Version</Text>
+              <Text style={styles.cardValue}>1.0.0</Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  backgroundImage: {
+    resizeMode: 'cover',
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: '#e1d9c5',
+    backgroundColor: 'transparent',
   },
   container: {
     paddingHorizontal: 24,
-    paddingTop: 12,
+    paddingTop: 20,
     paddingBottom: 40,
   },
+  brandImage: {
+    width: 64,
+    height: 64,
+    marginBottom: 8,
+    alignSelf: 'center',
+    opacity: 0.95,
+  },
+  brandLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 2,
+    marginBottom: 8,
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
   title: {
-    fontFamily: 'Lora_700Bold',
-    color: '#2F2A24',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#2B2A28',
     fontSize: 32,
     fontWeight: '700',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontFamily: 'Lora_400Regular',
-    color: '#9A8F7A',
-    fontSize: 14,
     marginBottom: 24,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 28,
   },
   sectionTitle: {
-    fontFamily: 'Lora_700Bold',
-    color: '#6E5A3C',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginBottom: 10,
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1.2,
+    marginBottom: 12,
     textTransform: 'uppercase',
   },
   card: {
-    backgroundColor: '#E8E3D9',
-    borderRadius: 16,
-    padding: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderRadius: 20,
+    padding: 20,
     borderWidth: 1,
-    borderColor: '#D8D1C2',
+    borderColor: 'rgba(233, 225, 210, 0.6)',
   },
-  cardTitle: {
-    fontFamily: 'Lora_700Bold',
-    color: '#2F2A24',
+  cardLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    marginBottom: 6,
+    textTransform: 'uppercase',
+  },
+  cardValue: {
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#2B2A28',
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  cardText: {
-    fontFamily: 'Lora_400Regular',
-    color: '#6E5A3C',
+  cardDescription: {
+    fontFamily: 'Inter_400Regular',
+    color: '#8A7A67',
     fontSize: 14,
     lineHeight: 22,
-    marginBottom: 12,
   },
   logoutButton: {
-    backgroundColor: '#9A8F7A',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginTop: 8,
+    backgroundColor: '#E9E1D2',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    marginTop: 12,
+    alignItems: 'center',
   },
   logoutButtonText: {
-    fontFamily: 'Lora_700Bold',
-    color: '#FFFFFF',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#2B2A28',
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '600',
     textAlign: 'center',
   },
   resetButton: {
-    backgroundColor: '#9A8F7A',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginTop: 8,
+    backgroundColor: '#E9E1D2',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    marginTop: 12,
+    alignItems: 'center',
   },
   buttonPressed: {
     opacity: 0.9,
-    transform: [{ scale: 0.99 }],
+    transform: [{ scale: 0.98 }],
   },
   resetButtonText: {
-    fontFamily: 'Lora_700Bold',
-    color: '#FFFFFF',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#2B2A28',
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '600',
     textAlign: 'center',
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#E8E3D9',
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    borderWidth: 1,
-    borderColor: '#D8D1C2',
-  },
-  infoLabel: {
-    fontFamily: 'Lora_400Regular',
-    color: '#6E5A3C',
-    fontSize: 14,
-  },
-  infoValue: {
-    fontFamily: 'Lora_700Bold',
-    color: '#2F2A24',
-    fontSize: 14,
-    fontWeight: '700',
   },
 });

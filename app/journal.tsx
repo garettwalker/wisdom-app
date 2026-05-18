@@ -1,4 +1,5 @@
-import { Lora_400Regular, Lora_700Bold, useFonts } from '@expo-google-fonts/lora';
+import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -17,41 +18,50 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 export default function JournalScreen() {
-  const [fontsLoaded] = useFonts({
-    Lora_400Regular,
-    Lora_700Bold,
+  const [playfairLoaded] = usePlayfairFonts({
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_700Bold,
   });
 
+  const [interLoaded] = useInterFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+  });
+
+  const fontsLoaded = playfairLoaded && interLoaded;
+
   const { user } = useAuth();
-  const { day, anchor, duration, isEditing } = useLocalSearchParams<{
+  const { day, duration, isEditing } = useLocalSearchParams<{
     day?: string;
-    anchor?: string;
     duration?: string;
     isEditing?: string;
   }>();
 
   const dayNumber = Number(day) || 1;
-  const anchorWord = typeof anchor === 'string' ? anchor : 'Still';
   const [journal, setJournal] = useState('');
+  const [prayer, setPrayer] = useState('');
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
   const isEditMode = isEditing === 'true';
 
-  // Load existing journal entry if editing
   useFocusEffect(
     React.useCallback(() => {
       if (isEditMode && user) {
         setLoading(true);
         supabase
           .from('user_progress')
-          .select('journal_entry')
+          .select('journal_entry, prayer_entry, feeling')
           .eq('user_id', user.id)
           .eq('day_number', dayNumber)
           .single()
           .then(({ data, error }) => {
-            if (!error && data?.journal_entry) {
-              setJournal(data.journal_entry);
+            if (!error && data) {
+              if (data.journal_entry) setJournal(data.journal_entry);
+              if (data.prayer_entry) setPrayer(data.prayer_entry);
+              if (data.feeling) setSelectedFeeling(data.feeling);
             }
             setLoading(false);
           });
@@ -67,21 +77,23 @@ export default function JournalScreen() {
 
     try {
       if (isEditMode) {
-        // Update existing entry
         const { error } = await supabase.from('user_progress').update({
           journal_entry: journal.trim(),
+          prayer_entry: prayer.trim(),
+          feeling: selectedFeeling,
           updated_at: new Date().toISOString(),
         }).eq('user_id', user.id).eq('day_number', dayNumber);
 
         if (error) throw error;
       } else {
-        // Insert new entry (first-time completion)
         const { error } = await supabase.from('user_progress').upsert(
           {
             user_id: user.id,
             day_number: dayNumber,
             session_duration: Number(duration) || 300,
             journal_entry: journal.trim(),
+            prayer_entry: prayer.trim(),
+            feeling: selectedFeeling,
             completed_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           },
@@ -93,7 +105,6 @@ export default function JournalScreen() {
         if (error) throw error;
       }
 
-      // Navigate back to calendar, preserving the selected day
       router.push({
         pathname: '/calendar',
         params: { selectedDay: String(dayNumber) },
@@ -118,7 +129,7 @@ export default function JournalScreen() {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6E5A3C" />
+          <ActivityIndicator size="large" color="#8A7A67" />
           <Text style={styles.loadingText}>Loading your reflection...</Text>
         </View>
       </SafeAreaView>
@@ -134,7 +145,6 @@ export default function JournalScreen() {
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
             <Text style={styles.dayLabel}>Day {dayNumber}</Text>
-            <Text style={styles.anchorLabel}>Anchor: {anchorWord}</Text>
           </View>
 
           <Text style={styles.title}>
@@ -143,7 +153,7 @@ export default function JournalScreen() {
           <Text style={styles.subtitle}>
             {isEditMode
               ? 'Update your reflection from this session.'
-              : 'What did you hear, feel, or sense while sitting in silence?'}
+              : 'What is one word or phrase that stood out to you today?'}
           </Text>
 
           {error ? (
@@ -156,7 +166,7 @@ export default function JournalScreen() {
             <TextInput
               style={styles.journalInput}
               placeholder="Write your reflection here..."
-              placeholderTextColor="#9A8F7A"
+              placeholderTextColor="#8A7A67"
               value={journal}
               onChangeText={(text) => {
                 setJournal(text);
@@ -168,8 +178,44 @@ export default function JournalScreen() {
             />
           </View>
 
+          <View style={styles.feelingsContainer}>
+            <Text style={styles.feelingsLabel}>Today I feel</Text>
+            <View style={styles.feelingsRow}>
+              {['Grateful', 'Peaceful', 'Tired', 'Hopeful', 'Other'].map((feeling) => (
+                <Pressable
+                  key={feeling}
+                  onPress={() => setSelectedFeeling(feeling)}
+                  style={({ pressed }) => [
+                    styles.feelingChip,
+                    selectedFeeling === feeling && styles.feelingChipSelected,
+                    pressed && !selectedFeeling && styles.feelingChipPressed,
+                  ]}
+                >
+                  <Text style={[
+                    styles.feelingChipText,
+                    selectedFeeling === feeling && styles.feelingChipTextSelected,
+                  ]}>{feeling}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.prayerContainer}>
+            <Text style={styles.prayerLabel}>Prayer</Text>
+            <TextInput
+              style={styles.prayerInput}
+              placeholder="Lord..."
+              placeholderTextColor="#8A7A67"
+              value={prayer}
+              onChangeText={setPrayer}
+              multiline
+              textAlignVertical="top"
+              editable={!saving}
+            />
+          </View>
+
           <Text style={styles.hint}>
-            There&apos;s no wrong answer. This is between you and God.
+            You do not have to perform. You only need to return honestly.
           </Text>
 
           <Pressable
@@ -204,7 +250,7 @@ export default function JournalScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F1EA',
+    backgroundColor: '#F6F3EC',
   },
   loadingContainer: {
     flex: 1,
@@ -212,8 +258,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingText: {
-    fontFamily: 'Lora_400Regular',
-    color: '#9A8F7A',
+    fontFamily: 'Inter_400Regular',
+    color: '#8A7A67',
     fontSize: 16,
     marginTop: 16,
   },
@@ -224,40 +270,35 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   dayLabel: {
-    fontFamily: 'Lora_700Bold',
-    color: '#9A8F7A',
-    fontSize: 14,
-    fontWeight: '700',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
     letterSpacing: 1.5,
-    marginBottom: 8,
-  },
-  anchorLabel: {
-    fontFamily: 'Lora_400Regular',
-    color: '#6E5A3C',
-    fontSize: 16,
+    textTransform: 'uppercase',
   },
   title: {
-    fontFamily: 'Lora_700Bold',
-    color: '#2F2A24',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#2B2A28',
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
-    fontFamily: 'Lora_400Regular',
-    color: '#6E5A3C',
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#8A7A67',
     fontSize: 15,
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 24,
+    marginBottom: 28,
   },
   errorContainer: {
     backgroundColor: '#FEE',
-    borderRadius: 12,
+    borderRadius: 14,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginBottom: 16,
@@ -265,61 +306,133 @@ const styles = StyleSheet.create({
     borderColor: '#FAA',
   },
   errorText: {
+    fontFamily: 'Inter_400Regular',
     color: '#A33',
     fontSize: 14,
     textAlign: 'center',
   },
   journalContainer: {
-    backgroundColor: '#E8E3D9',
-    borderRadius: 16,
-    padding: 18,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
     borderWidth: 1,
-    borderColor: '#D8D1C2',
-    marginBottom: 16,
-    minHeight: 200,
+    borderColor: '#E9E1D2',
+    marginBottom: 20,
+    minHeight: 180,
   },
   journalInput: {
-    fontFamily: 'Lora_400Regular',
-    color: '#2F2A24',
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#2B2A28',
+    fontSize: 16,
+    lineHeight: 28,
+    minHeight: 160,
+    padding: 0,
+  },
+  feelingsContainer: {
+    marginBottom: 20,
+  },
+  feelingsLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1,
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+  },
+  feelingsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  feelingChip: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: '#E9E1D2',
+  },
+  feelingChipPressed: {
+    backgroundColor: '#E9E1D2',
+  },
+  feelingChipSelected: {
+    backgroundColor: '#E9E1D2',
+    borderColor: '#8A7A67',
+  },
+  feelingChipText: {
+    fontFamily: 'Inter_500Medium',
+    color: '#8A7A67',
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  feelingChipTextSelected: {
+    color: '#2B2A28',
+  },
+  prayerContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#E9E1D2',
+    marginBottom: 20,
+    minHeight: 140,
+  },
+  prayerLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#8A7A67',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1,
+    marginBottom: 12,
+    textTransform: 'uppercase',
+  },
+  prayerInput: {
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#2B2A28',
     fontSize: 16,
     lineHeight: 26,
-    minHeight: 180,
+    minHeight: 100,
     padding: 0,
   },
   hint: {
-    fontFamily: 'Lora_400Regular',
-    color: '#9A8F7A',
-    fontSize: 13,
+    fontFamily: 'PlayfairDisplay_400Regular',
+    color: '#8A7A67',
+    fontSize: 14,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 28,
     fontStyle: 'italic',
+    lineHeight: 22,
   },
   saveButton: {
-    backgroundColor: '#3E3A34',
-    borderRadius: 18,
-    paddingVertical: 16,
+    backgroundColor: '#2B2A28',
+    borderRadius: 26,
+    paddingVertical: 18,
     paddingHorizontal: 34,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 4,
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
   saveButtonDisabled: {
     opacity: 0.5,
   },
   saveButtonPressed: {
-    transform: [{ scale: 0.99 }],
+    opacity: 0.95,
+    transform: [{ scale: 0.98 }],
   },
   saveButtonText: {
-    fontFamily: 'Lora_700Bold',
+    fontFamily: 'Inter_600SemiBold',
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '600',
   },
   skipContainer: {
-    marginTop: 20,
+    marginTop: 24,
     paddingVertical: 12,
     alignItems: 'center',
   },
@@ -327,9 +440,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   skipText: {
-    fontFamily: 'Lora_700Bold',
-    color: '#9A8F7A',
+    fontFamily: 'Inter_500Medium',
+    color: '#8A7A67',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
 });
