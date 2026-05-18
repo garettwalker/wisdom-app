@@ -68,7 +68,6 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true,
-      "baseUrl": "/wilderness"
     },
     "extra": {
       "router": {},
