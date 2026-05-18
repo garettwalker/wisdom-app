@@ -34,6 +34,7 @@
       "**/*"
     ],
     "plugins": [
+      "./plugins/withNavigationAssets.js",
       "expo-router",
       [
         "expo-splash-screen",
