@@ -223,14 +223,19 @@ Metro preserves source file paths when bundling assets. When those paths are dee
 
 ### Applied Fixes
 - [x] Local fonts instead of @expo-google-fonts
-- [x] Navigation asset patch (shell script + prebuildCommand)
+- [x] EAS pre-install hook for navigation asset patching
 - [x] Xcode 16 (latest image)
 - [x] Expo SDK 54
 - [x] NPM cache permissions fixed
-- [x] Node modules reinstalled with patch script
+- [x] Config plugin (attempted, replaced by pre-install hook)
+
+### Completed Attempts
+- [x] Attempt 8: Shell script + prebuildCommand - ❌ Failed (expo CLI doesn't accept --platform on scripts)
+- [x] Attempt 9: Config plugin withDangerousMod - ❌ Failed (patch runs but Metro still sees original paths)
+- [x] Attempt 10: EAS pre-install hook - ⏳ Current (runs after npm install, before build)
 
 ### Pending
-- [ ] Build attempt with shell script + prebuildCommand (Attempt 8)
+- [ ] Build attempt with EAS pre-install hook
 - [ ] If successful: Submit to App Store / TestFlight
 
 ---
@@ -251,12 +256,59 @@ Error: Empty file
 
 ---
 
-### Attempt 8: Shell Script with prebuildCommand (CURRENT)
+### Attempt 8: Shell Script with prebuildCommand
+**Error:**
+```
+unknown or unexpected option: --platform
+npx expo chmod +x ./scripts/patch-navigation.sh && ./scripts/patch-navigation.sh --platform ios exited with non-zero code: 1
+```
+
+**Root Cause:**  
+`prebuildCommand` is designed for `expo prebuild` CLI commands, not arbitrary shell scripts. EAS automatically appends `--platform ios` which breaks shell scripts.
+
+**Fix:**
+- ❌ Removed `prebuildCommand` from `eas.json`
+- ✅ Switched to Expo config plugin approach
+
+---
+
+### Attempt 9: Expo Config Plugin withDangerousMod
+**Error:**
+```
+Error: ENOTDIR: not a directory, mkdir '.../@react-navigation/elements/assets'
+```
+
+**Root Cause:**  
+Config plugin runs during `expo prebuild`, but `npm install` on EAS happens AFTER prebuild (or resets node_modules). The patched files get overwritten.
+
+**Fix:**
+- ❌ Config plugin doesn't run at the right time
+- ✅ Switched to EAS pre-install hook
+
+---
+
+### Attempt 10: EAS Pre-Install Hook (CURRENT)
 **Solution:**
+1. Created `eas-hooks/pre-install.sh`:
+   - Runs automatically after `npm install` on EAS servers
+   - Copies assets to flatter path
+   - Patches JS imports
+2. No configuration needed - EAS detects and runs hooks automatically
+
+**Why this should work:**
+- EAS runs `npm install`
+- Hook patches node_modules immediately after
+- Metro bundling sees patched files
+- No timing conflicts
+
+---
+
+### Historical: Shell Script Attempt Details
+**Original Solution:**
 1. Created `scripts/patch-navigation.sh` to:
    - Copy assets from `lib/module/assets/` to `assets/` (flatter path)
    - Patch JS imports using `sed`
-2. Added to `eas.json`:
+2. Tried multiple ways to execute on EAS:
    ```json
    "prebuildCommand": "chmod +x ./scripts/patch-navigation.sh && ./scripts/patch-navigation.sh"
    ```
@@ -320,6 +372,25 @@ eas build:logs --build-id <BUILD_ID>
 
 ---
 
-**Last Updated:** May 18, 2026 - Shell script with prebuildCommand applied (Attempt 8 in progress)  
-**Build Attempts:** 8+  
-**Time Invested:** ~4 hours
+**Last Updated:** May 18, 2026 - Attempts 8-10, EAS pre-install hook created (10+ attempts total)
+**Build Attempts:** 10+
+**Time Invested:** ~5 hours
+
+---
+
+## Key Insight
+
+The ENOTDIR error is a **known issue** with React Navigation 7 + Metro 0.80+ + EAS managed builds. The community hasn't found a clean solution.
+
+**What works locally doesn't work on EAS because:**
+- `npm install` on EAS servers resets node_modules
+- Custom patches get overwritten
+- Metro bundling happens after prebuild but before our patches apply
+
+**Current attempt (EAS pre-install hook) is the most promising** because it patches immediately after npm install, before any other build steps.
+
+**If this fails, options are:**
+1. Fork @react-navigation/elements with flatter asset paths
+2. Switch to bare workflow (eject from managed)
+3. Use patch-package with post-install-postinstall (hacky)
+4. Contact EAS support with full build logs
