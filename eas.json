@@ -22,7 +22,8 @@
       "ios": {
         "image": "latest"
       },
-      "node": "20.18.0"
+      "node": "20.18.0",
+      "prebuildCommand": "chmod +x ./scripts/patch-navigation.sh && ./scripts/patch-navigation.sh"
     }
   },
   "submit": {
