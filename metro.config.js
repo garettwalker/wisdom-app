@@ -2,11 +2,12 @@ const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
-// Fix ENOTDIR errors by blocking Metro from bundling assets in node_modules
-// These assets should be handled by native build tools, not Metro
+// Only block specific problematic assets that cause ENOTDIR errors
+// Allow expo-router and other needed node_modules assets
 config.resolver.blockList = [
-  // Block all asset files in node_modules from being bundled by Metro
-  /.*\/node_modules\/.*\.(png|jpg|jpeg|gif|webp|svg|ico|bmp|mp3|mp4|mov|m4v|wav|aac)$/i,
+  // Block @react-navigation/elements assets specifically (deep paths cause issues)
+  /.*\/node_modules\/.*\/lib\/module\/assets\/.*$/,
+  /.*\/node_modules\/.*\/lib\/.*\/assets\/.*$/,
 ];
 
 module.exports = config;
