@@ -3,7 +3,7 @@
 **Project:** Wilderness App (desert-app)  
 **Date Range:** May 17-18, 2026  
 **Objective:** Build iOS app for TestFlight/App Store using EAS Build  
-**Status:** IN PROGRESS - Navigation Asset Patch Applied
+**Status:** IN PROGRESS - Navigation Asset Patch (patch-package) Applied
 
 ---
 
@@ -129,6 +129,31 @@ Failed to resolve plugin for module "expo-router"
 
 ---
 
+### Attempt 6: Custom Patch Script Failed on EAS
+**Error:**
+```
+Error: ENOTDIR: not a directory, mkdir
+'/Users/expo/workingdir/build/ios/build/.../Wilderness.app/wilderness/assets/node_modules/@react-navigation/elements/lib/module/assets'
+```
+
+**Root Cause:**  
+Custom `scripts/patch-navigation-assets.js` runs locally but NOT during EAS build. EAS servers don't execute postinstall scripts the same way as local npm install.
+
+**Attempted Fixes:**
+1. ❌ Custom `patch-navigation-assets.js` script - Only works locally, not on EAS
+2. ✅ **SOLUTION:** Switched to `patch-package`
+   - Installed: `npm install --save-dev patch-package`
+   - Created patch: `npx patch-package @react-navigation/elements`
+   - Updated postinstall: `"postinstall": "patch-package"`
+   - Patch file: `patches/@react-navigation+elements+2.9.18.patch`
+
+**Why patch-package works:**
+- EAS recognizes patches in `patches/` directory automatically
+- Applies after `npm install` on build servers
+- Standard approach for node_modules patching
+
+---
+
 ## Configuration Files
 
 ### Final `metro.config.js`
@@ -177,7 +202,7 @@ All Metro config attempts caused more issues. Using default Expo Metro config.
 
 ### What Works
 1. ✅ Local font files + expo-font config plugin
-2. ✅ Post-install patches for problematic node_modules
+2. ✅ `patch-package` for node_modules patches (NOT custom scripts)
 3. ✅ Xcode "latest" image for App Store compliance
 4. ✅ Expo SDK version must match React Native version
 
@@ -185,6 +210,7 @@ All Metro config attempts caused more issues. Using default Expo Metro config.
 1. ❌ `@expo-google-fonts` with EAS builds (Metro bundling issues)
 2. ❌ Metro `blockList` for assets (breaks required imports)
 3. ❌ Deep asset paths in node_modules (ENOTDIR errors)
+4. ❌ Custom postinstall scripts on EAS (use patch-package instead)
 
 ### Why ENOTDIR Happens
 Metro preserves source file paths when bundling assets. When those paths are deeply nested (`lib/module/assets/...`), the resulting iOS archive path exceeds filesystem limits or treats files as directories.
@@ -197,14 +223,14 @@ Metro preserves source file paths when bundling assets. When those paths are dee
 
 ### Applied Fixes
 - [x] Local fonts instead of @expo-google-fonts
-- [x] Navigation asset patch script
+- [x] Navigation asset patch (patch-package)
 - [x] Xcode 16 (latest image)
 - [x] Expo SDK 54
 - [x] NPM cache permissions fixed
-- [x] Node modules reinstalled with post-install patch
+- [x] Node modules reinstalled with patch-package
 
 ### Pending
-- [ ] Build attempt with navigation patch
+- [ ] Build attempt with patch-package (Attempt 6)
 - [ ] If successful: Submit to App Store / TestFlight
 
 ---
@@ -260,6 +286,6 @@ eas build:logs --build-id <BUILD_ID>
 
 ---
 
-**Last Updated:** May 18, 2026 - After navigation asset patch applied  
-**Build Attempts:** 5+  
-**Time Invested:** ~3 hours
+**Last Updated:** May 18, 2026 - Switched to patch-package (Attempt 6 in progress)  
+**Build Attempts:** 6+  
+**Time Invested:** ~3.5 hours

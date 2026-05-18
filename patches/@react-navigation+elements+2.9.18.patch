@@ -114,3 +114,23 @@ diff --git a/node_modules/@react-navigation/elements/assets/search-icon@4x.ios.p
 new file mode 100644
 index 0000000..a22662e
 Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@4x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/lib/module/index.js b/node_modules/@react-navigation/elements/lib/module/index.js
+index 1472ccb..acce9f8 100644
+--- a/node_modules/@react-navigation/elements/lib/module/index.js
++++ b/node_modules/@react-navigation/elements/lib/module/index.js
+@@ -1,10 +1,10 @@
+ "use strict";
+ 
+-import backIcon from './assets/back-icon.png';
+-import backIconMask from './assets/back-icon-mask.png';
+-import clearIcon from './assets/clear-icon.png';
+-import closeIcon from './assets/close-icon.png';
+-import searchIcon from './assets/search-icon.png';
++import backIcon from '../../assets/back-icon.png';
++import backIconMask from '../../assets/back-icon-mask.png';
++import clearIcon from '../../assets/clear-icon.png';
++import closeIcon from '../../assets/close-icon.png';
++import searchIcon from '../../assets/search-icon.png';
+ export { Background } from "./Background.js";
+ export { Badge } from "./Badge.js";
+ export { Button } from "./Button.js";
