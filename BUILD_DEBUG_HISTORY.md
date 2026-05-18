@@ -223,15 +223,49 @@ Metro preserves source file paths when bundling assets. When those paths are dee
 
 ### Applied Fixes
 - [x] Local fonts instead of @expo-google-fonts
-- [x] Navigation asset patch (patch-package)
+- [x] Navigation asset patch (shell script + prebuildCommand)
 - [x] Xcode 16 (latest image)
 - [x] Expo SDK 54
 - [x] NPM cache permissions fixed
-- [x] Node modules reinstalled with patch-package
+- [x] Node modules reinstalled with patch script
 
 ### Pending
-- [ ] Build attempt with patch-package (Attempt 6)
+- [ ] Build attempt with shell script + prebuildCommand (Attempt 8)
 - [ ] If successful: Submit to App Store / TestFlight
+
+---
+
+### Attempt 7: patch-package Binary Files Failed
+**Error:**
+```
+SyntaxError: node_modules/@react-navigation/elements/assets/back-icon.png: Empty file
+Error: Empty file
+```
+
+**Root Cause:**  
+`patch-package` doesn't handle binary files (PNG images) correctly. The patch file contained empty/invalid binary data.
+
+**Fix:**
+- ❌ Deleted broken patch
+- ✅ Switched to shell script approach
+
+---
+
+### Attempt 8: Shell Script with prebuildCommand (CURRENT)
+**Solution:**
+1. Created `scripts/patch-navigation.sh` to:
+   - Copy assets from `lib/module/assets/` to `assets/` (flatter path)
+   - Patch JS imports using `sed`
+2. Added to `eas.json`:
+   ```json
+   "prebuildCommand": "chmod +x ./scripts/patch-navigation.sh && ./scripts/patch-navigation.sh"
+   ```
+3. Updated `package.json` postinstall to run same script
+
+**Why this should work:**
+- EAS `prebuildCommand` runs explicitly before build
+- Shell script handles binary files correctly (cp, not patch)
+- Tested locally - patches applied successfully
 
 ---
 
@@ -286,6 +320,6 @@ eas build:logs --build-id <BUILD_ID>
 
 ---
 
-**Last Updated:** May 18, 2026 - Switched to patch-package (Attempt 6 in progress)  
-**Build Attempts:** 6+  
-**Time Invested:** ~3.5 hours
+**Last Updated:** May 18, 2026 - Shell script with prebuildCommand applied (Attempt 8 in progress)  
+**Build Attempts:** 8+  
+**Time Invested:** ~4 hours
