@@ -1,5 +1,10 @@
 #!/bin/bash
 # Pre-build patch for @react-navigation/elements to fix ENOTDIR errors
+# Accepts --platform flag (ignored, for EAS compatibility)
+
+while [[ "$1" =~ ^-- ]]; do
+  shift
+done
 
 echo "Patching @react-navigation/elements assets..."
 
