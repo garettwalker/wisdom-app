@@ -1,5 +1,3 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { router, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -18,19 +16,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 
 export default function HomeScreen() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-  });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
-
   const { user, loading } = useAuth();
   const [checking, setChecking] = useState(true);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
@@ -65,7 +50,7 @@ export default function HomeScreen() {
     }, [loading, user])
   );
 
-  if (!fontsLoaded || checking || loading) {
+  if (checking || loading) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.loadingContainer}>

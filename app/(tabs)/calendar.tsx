@@ -1,5 +1,3 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { Link, router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -25,19 +23,6 @@ type ProgressEntry = {
 };
 
 export default function CalendarScreen() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-  });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
-
   const { user } = useAuth();
   const params = useLocalSearchParams<{ selectedDay?: string }>();
   const [progressMap, setProgressMap] = useState<Map<number, ProgressEntry>>(new Map());
@@ -149,10 +134,6 @@ export default function CalendarScreen() {
       },
     });
   };
-
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
-  }
 
   if (!user) {
     return (

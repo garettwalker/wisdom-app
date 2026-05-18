@@ -1,5 +1,3 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -24,19 +22,6 @@ function formatTime(totalSeconds: number) {
 }
 
 export default function SessionScreen() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-  });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
-
   const { user } = useAuth();
 
   const { day, anchor, duration } = useLocalSearchParams<{
@@ -217,10 +202,6 @@ export default function SessionScreen() {
   if (!user) {
     router.replace('/login');
     return null;
-  }
-
-  if (!fontsLoaded) {
-    return <Text style={styles.loading}>Loading...</Text>;
   }
 
   return (

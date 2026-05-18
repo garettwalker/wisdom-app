@@ -1,22 +1,16 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { Text } from 'react-native';
 import { AuthProvider } from '../contexts/AuthContext';
 
 export default function RootLayout() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
+  const [fontsLoaded] = useFonts({
+    'PlayfairDisplay_400Regular': require('../assets/fonts/PlayfairDisplay_400Regular.ttf'),
+    'PlayfairDisplay_700Bold': require('../assets/fonts/PlayfairDisplay_700Bold.ttf'),
+    'Inter_400Regular': require('../assets/fonts/Inter_400Regular.ttf'),
+    'Inter_500Medium': require('../assets/fonts/Inter_500Medium.ttf'),
+    'Inter_600SemiBold': require('../assets/fonts/Inter_600SemiBold.ttf'),
   });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
 
   if (!fontsLoaded) {
     return <Text>Loading...</Text>;

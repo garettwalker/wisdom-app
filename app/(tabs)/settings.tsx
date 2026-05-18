@@ -1,5 +1,3 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -18,19 +16,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 
 export default function SettingsScreen() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-  });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
-
   const { user, signOut } = useAuth();
 
   const handleResetProgress = async () => {
@@ -92,10 +77,6 @@ export default function SettingsScreen() {
     router.replace('/login');
   };
 
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
-  }
-
   return (
     <ImageBackground
       source={require('../../assets/wilderness_assets_refined/backgrounds/login.background.new.png')}
@@ -150,7 +131,7 @@ export default function SettingsScreen() {
             <View style={styles.card}>
               <Text style={styles.cardLabel}>Your Progress</Text>
               <Text style={styles.cardDescription}>
-                Track your completion of each day&apos;s session. Your progress
+                Track your completion of each day's session. Your progress
                 is synced to the cloud and saved across devices.
               </Text>
               <Pressable

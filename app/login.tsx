@@ -1,5 +1,3 @@
-import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold, useFonts as usePlayfairFonts } from '@expo-google-fonts/playfair-display';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts as useInterFonts } from '@expo-google-fonts/inter';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -19,19 +17,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function LoginScreen() {
-  const [playfairLoaded] = usePlayfairFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-  });
-
-  const [interLoaded] = useInterFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
-  const fontsLoaded = playfairLoaded && interLoaded;
-
   const { signIn, signUp } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -65,10 +50,6 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
-
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
-  }
 
   return (
     <ImageBackground
