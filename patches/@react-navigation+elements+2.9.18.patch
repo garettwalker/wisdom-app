@@ -1,0 +1,116 @@
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon-mask.png b/node_modules/@react-navigation/elements/assets/back-icon-mask.png
+new file mode 100644
+index 0000000..7c1fd84
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon-mask.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon.png b/node_modules/@react-navigation/elements/assets/back-icon.png
+new file mode 100644
+index 0000000..17e52e8
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@1x.android.png b/node_modules/@react-navigation/elements/assets/back-icon@1x.android.png
+new file mode 100644
+index 0000000..083db29
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@1x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@1x.ios.png b/node_modules/@react-navigation/elements/assets/back-icon@1x.ios.png
+new file mode 100644
+index 0000000..8ed2ec4
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@1x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@2x.android.png b/node_modules/@react-navigation/elements/assets/back-icon@2x.android.png
+new file mode 100644
+index 0000000..6de0a1c
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@2x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@2x.ios.png b/node_modules/@react-navigation/elements/assets/back-icon@2x.ios.png
+new file mode 100644
+index 0000000..63de0e3
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@2x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@3x.android.png b/node_modules/@react-navigation/elements/assets/back-icon@3x.android.png
+new file mode 100644
+index 0000000..15a983a
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@3x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@3x.ios.png b/node_modules/@react-navigation/elements/assets/back-icon@3x.ios.png
+new file mode 100644
+index 0000000..2320fd7
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@3x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@4x.android.png b/node_modules/@react-navigation/elements/assets/back-icon@4x.android.png
+new file mode 100644
+index 0000000..17e52e8
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@4x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/back-icon@4x.ios.png b/node_modules/@react-navigation/elements/assets/back-icon@4x.ios.png
+new file mode 100644
+index 0000000..b26634e
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/back-icon@4x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/clear-icon.png b/node_modules/@react-navigation/elements/assets/clear-icon.png
+new file mode 100644
+index 0000000..d9af7b6
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/clear-icon.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/clear-icon@1x.png b/node_modules/@react-navigation/elements/assets/clear-icon@1x.png
+new file mode 100644
+index 0000000..01a7b63
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/clear-icon@1x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/clear-icon@2x.png b/node_modules/@react-navigation/elements/assets/clear-icon@2x.png
+new file mode 100644
+index 0000000..c852b6b
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/clear-icon@2x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/clear-icon@3x.png b/node_modules/@react-navigation/elements/assets/clear-icon@3x.png
+new file mode 100644
+index 0000000..5f44c54
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/clear-icon@3x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/clear-icon@4x.png b/node_modules/@react-navigation/elements/assets/clear-icon@4x.png
+new file mode 100644
+index 0000000..d9af7b6
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/clear-icon@4x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/close-icon.png b/node_modules/@react-navigation/elements/assets/close-icon.png
+new file mode 100644
+index 0000000..34396d4
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/close-icon.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/close-icon@1x.png b/node_modules/@react-navigation/elements/assets/close-icon@1x.png
+new file mode 100644
+index 0000000..4e3e31b
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/close-icon@1x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/close-icon@2x.png b/node_modules/@react-navigation/elements/assets/close-icon@2x.png
+new file mode 100644
+index 0000000..12981d8
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/close-icon@2x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/close-icon@3x.png b/node_modules/@react-navigation/elements/assets/close-icon@3x.png
+new file mode 100644
+index 0000000..b4f5127
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/close-icon@3x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/close-icon@4x.png b/node_modules/@react-navigation/elements/assets/close-icon@4x.png
+new file mode 100644
+index 0000000..34396d4
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/close-icon@4x.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon.png b/node_modules/@react-navigation/elements/assets/search-icon.png
+new file mode 100644
+index 0000000..87a30ca
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@1x.android.png b/node_modules/@react-navigation/elements/assets/search-icon@1x.android.png
+new file mode 100644
+index 0000000..13071d6
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@1x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@1x.ios.png b/node_modules/@react-navigation/elements/assets/search-icon@1x.ios.png
+new file mode 100644
+index 0000000..9dfd92e
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@1x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@2x.android.png b/node_modules/@react-navigation/elements/assets/search-icon@2x.android.png
+new file mode 100644
+index 0000000..0bf153e
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@2x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@2x.ios.png b/node_modules/@react-navigation/elements/assets/search-icon@2x.ios.png
+new file mode 100644
+index 0000000..a22662e
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@2x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@3x.android.png b/node_modules/@react-navigation/elements/assets/search-icon@3x.android.png
+new file mode 100644
+index 0000000..32808ba
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@3x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@3x.ios.png b/node_modules/@react-navigation/elements/assets/search-icon@3x.ios.png
+new file mode 100644
+index 0000000..4a8433c
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@3x.ios.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@4x.android.png b/node_modules/@react-navigation/elements/assets/search-icon@4x.android.png
+new file mode 100644
+index 0000000..87a30ca
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@4x.android.png differ
+diff --git a/node_modules/@react-navigation/elements/assets/search-icon@4x.ios.png b/node_modules/@react-navigation/elements/assets/search-icon@4x.ios.png
+new file mode 100644
+index 0000000..a22662e
+Binary files /dev/null and b/node_modules/@react-navigation/elements/assets/search-icon@4x.ios.png differ

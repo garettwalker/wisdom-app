@@ -21,7 +21,8 @@
       },
       "ios": {
         "image": "latest"
-      }
+      },
+      "node": "20.18.0"
     }
   },
   "submit": {
